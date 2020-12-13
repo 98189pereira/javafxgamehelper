@@ -41,15 +41,15 @@ public class DemoGame extends GameHelper {
 
     //  An optional object to send additional
     //  game data to each assets' update() method
-    static final DemoUpdateData gameUpdateData = new DemoUpdateData(720, 725);
+    static final DemoUpdateData gameUpdateData = new DemoUpdateData(720, 720);
 
     //  set the game's data and start the JavaFX application
     public static void main(String ... args) {
         setGameData("src/main/resources/index.html",
-                "Demo Game", 720, 725,
+                "Demo Game", 720, 720,
                 gameSprites, gameAssets, gameUpdateData);
         launch(args);
-    }
+    }// End of main()
 
     /*
      *  Method:     pauseGame
@@ -61,7 +61,7 @@ public class DemoGame extends GameHelper {
         game.endGame();
         Thread.sleep(1000);
         game.stage.addEventHandler(KeyEvent.KEY_PRESSED, waitForKey);
-    }
+    }// End of pauseGame()
 
     /*
      *  EventHandler    waitForKey
@@ -73,11 +73,11 @@ public class DemoGame extends GameHelper {
         @Override
         public void handle(KeyEvent keyEvent) {
             game.beginGame();
-            game.game.removeAsset("game over");
+            game.handler.removeAsset("game over");
             DefaultAsset player = (DefaultAsset) gameAssets[gameAssets.length - 1];
             player.setxPos(200);
             player.setyPos(645);
-            game.game.setAssets(gameAssets);
+            game.handler.setAssets(gameAssets);
             game.stage.removeEventHandler(KeyEvent.KEY_PRESSED, this);
         }
     };

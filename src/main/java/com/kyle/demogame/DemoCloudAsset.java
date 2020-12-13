@@ -26,15 +26,14 @@ public class DemoCloudAsset extends DefaultAsset {
 
     protected static final Random random = new Random();
 
-    protected static final double MIN_HEIGHT = 300;
-
     protected final int CLOUD_NO = random.nextInt(3);
     protected final double MOVEMENT_SPEED = random.nextDouble() * 5.0 + 0.5;
     protected final int MOVEMENT_DIRECTION = ( random.nextBoolean() ) ? 1 : -1;
 
+    protected double MIN_HEIGHT = 300;
+    protected double SIZE = 50;
     protected double yHeight;
-
-    private DemoUpdateData updateData = null;
+    protected DemoUpdateData updateData = null;
 
     @Override
     public void update(Object data, GameHandler handler) throws InterruptedException {
@@ -44,12 +43,9 @@ public class DemoCloudAsset extends DefaultAsset {
                 xPos = 0;
             else
                 xPos = updateData.getScreenXBoundary();
-            yHeight = random.nextDouble() *
-                    ( updateData.getScreenYBoundary() +
-                            updateData.getPlayerWorldHeight() -
-                            MIN_HEIGHT -
-                            updateData.getScreenYBoundary()
-                    );
+            yHeight = ( random.nextDouble() *
+                    ( updateData.getScreenYBoundary() - MIN_HEIGHT ) ) +
+                    ( updateData.getPlayerWorldHeight() - updateData.getScreenYBoundary() );
         }
         if(updateData.getPlayerWorldHeight() < updateData.getScreenYBoundary() / 2)
             yPos = yHeight - updateData.getPlayerWorldHeight() + updateData.getScreenYBoundary() / 2;
@@ -69,7 +65,9 @@ public class DemoCloudAsset extends DefaultAsset {
     public double[] getPosition() {
         return new double[]{
                 xPos + updateData.getGlobalScreenXOffset(),
-                yPos + updateData.getGlobalScreenYOffset()
+                yPos + updateData.getGlobalScreenYOffset(),
+                SIZE,
+                SIZE
         };
     }
 }// End DemoCloudAsset class

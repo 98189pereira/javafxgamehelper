@@ -46,11 +46,9 @@ public class GameHelper extends Application {
      *  Author:     Kyle
      *  Desc:       set game data required to run canvas game
      *  Params:     String canvasPath - the path to the canvas file
-     *                  (/src/main/resources/game-canvas/index.html)
      *              String windowTitle - the title of the JavaFX app window
      *              int screenWidth,
-     *              int screenHeight - the dimensions of the JavaFX window
-     *                  (must fit canvas!)
+     *              int screenHeight - the dimensions of the canvas window
      *              String[] sprites - the starting sprites used in the game
      *              GameAsset[] assets - the starting assets
      *              Object gameUpdateObject - an object sent to each assets'
@@ -135,6 +133,8 @@ public class GameHelper extends Application {
         public final int SCREEN_HEIGHT;
         public int fixedRate = 35;
 
+        public static final double JavaFXWebViewPadding = 5.0;
+
         //  Object fields
         public final WebView appWindow = new WebView();
         public final WebEngine gameWindow = appWindow.getEngine();
@@ -143,7 +143,7 @@ public class GameHelper extends Application {
         public Stage stage;
 
         public Timer updateLoop;
-        public GameHandler game;
+        public GameHandler handler;
 
         /*
          *  Method:     loadGameCanvas
@@ -167,11 +167,11 @@ public class GameHelper extends Application {
             gameWindow.load(index_path);
             display.getChildren().add(appWindow);
             display.setStyle("-fx-padding: 0px;");
-            scene = new Scene(display, SCREEN_WIDTH, SCREEN_HEIGHT);
+            scene = new Scene(display, SCREEN_WIDTH, SCREEN_HEIGHT + JavaFXWebViewPadding);
             stage.setScene(scene);
 
             //  Instantiate GameHandler and attach update loop object
-            game = new GameHandler(updateData);
+            handler = new GameHandler(updateData, SCREEN_WIDTH, SCREEN_HEIGHT);
 
             //  Attach GameHandler to JavaFX so that script can read assets
             gameWindow.getLoadWorker().stateProperty().addListener(
@@ -181,13 +181,13 @@ public class GameHelper extends Application {
                         }
 
                         JSObject window = (JSObject) gameWindow.executeScript("window");
-                        window.setMember("mainHandler", game);
+                        window.setMember("mainHandler", handler);
                     }
             );
 
             //  Attach key events to AssetHandler so that it can redirect them
             //  to the appropriate assets
-            stage.addEventHandler(KeyEvent.ANY, game::handleAssets);
+            stage.addEventHandler(KeyEvent.ANY, handler::handleAssets);
             this.stage = stage;
         }// End of loadGameCanvas()
 
@@ -199,7 +199,7 @@ public class GameHelper extends Application {
          */
         public void addSprites(String[] sprites) {
             for(String sprite : sprites) {
-                game.addSprite(sprite);
+                handler.addSprite(sprite);
             }
         }// End of addSprites()
 
@@ -210,7 +210,7 @@ public class GameHelper extends Application {
          *  Params:     GameAsset[] assets - the starting assets (in drawing order)
          */
         public void addAssets(GameAsset[] assets) {
-            game.setAssets(assets);
+            handler.setAssets(assets);
         }// End of addAssets()
 
         /*
@@ -238,7 +238,7 @@ public class GameHelper extends Application {
                 @Override
                 public void run() {
                     try {
-                        game.updateAssets();
+                        handler.updateAssets();
                     } catch (Exception ignored) {}
                 }
             };

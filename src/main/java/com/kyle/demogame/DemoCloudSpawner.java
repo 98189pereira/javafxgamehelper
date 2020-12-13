@@ -22,8 +22,8 @@ public class DemoCloudSpawner extends DefaultAsset {
 
     protected static final Random random = new Random();
 
-    protected static final int MAX_INTERVAL = 5000;
-    protected static final int MIN_INTERVAL = 500;
+    protected int MAX_INTERVAL = 5000;
+    protected int MIN_INTERVAL = 500;
 
     protected int waitInterval = random.nextInt(MAX_INTERVAL) + MIN_INTERVAL;
     protected long lastSpawnTime = System.currentTimeMillis();
@@ -31,12 +31,16 @@ public class DemoCloudSpawner extends DefaultAsset {
     @Override
     public void update(Object data, GameHandler handler) throws InterruptedException {
         if(System.currentTimeMillis() - lastSpawnTime > waitInterval) {
-            handler.addAsset(
-                    new DemoCloudAsset("cloud" + lastSpawnTime),
-                    handler.getNoAssets() - 2
-            );
+            spawn(handler, lastSpawnTime);
             waitInterval = random.nextInt(MAX_INTERVAL) + MIN_INTERVAL;
             lastSpawnTime = System.currentTimeMillis();
         }
+    }
+
+    public void spawn(GameHandler handler, long lastSpawnTime) {
+        handler.addAsset(
+                new DemoCloudAsset("cloud" + lastSpawnTime),
+                handler.getNoAssets() - 2
+        );
     }
 }// End DemoCloudSpawner class

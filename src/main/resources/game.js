@@ -6,7 +6,7 @@ var ctx;
 //Sprite obj
 var sprites;
 //Base asset location
-const assetPath = "assets/";
+const spritePath = "sprites/";
 //Loop status
 var loop;
 
@@ -29,12 +29,15 @@ function getNameFrom(nameChars) {
     return name;
 }
 
-//  Create Image assets for each Sprite
+//  Set canvas size and
+//  create Image assets for each Sprite
 function loadSprites() {
+    canvas.width = window.mainHandler.SCREEN_WIDTH;
+    canvas.height = window.mainHandler.SCREEN_HEIGHT;
     sprites = {};
     var noAssets = window.mainHandler.getNoSprites();
     for(var i = 0; i < noAssets; i++) {
-        var path = assetPath;
+        var path = spritePath;
         var name = getNameFrom(window.mainHandler.getSpriteName(i));
         path += name;
         sprites[name] = new Image();

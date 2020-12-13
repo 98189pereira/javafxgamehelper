@@ -15,103 +15,111 @@ public class GameHandler {
      *  Constructor method
      *  Parameters: UpdateDataType updateData - the object used to
      *              handle asset updates
+     *              double screen_width,
+     *              double screen_height - canvas dimensions
      */
-    public GameHandler(Object updateData) {
+    public GameHandler(Object updateData, double screen_width, double screen_height) {
         this.updateData = updateData;
+        SCREEN_WIDTH = screen_width;
+        SCREEN_HEIGHT = screen_height;
     }// End of constructor method
 
     final Object updateData;
+
+    public final double SCREEN_WIDTH;
+    public final double SCREEN_HEIGHT;
 
     String[] sprites = new String[0];
     GameAsset[] assets = new GameAsset[0];
 
     public void addSprite(String sprite) {
-        String[] newSprites = new String[this.sprites.length + 1];
-        System.arraycopy(this.sprites, 0, newSprites, 0, this.sprites.length);
+        String[] newSprites = new String[sprites.length + 1];
+        System.arraycopy(sprites, 0, newSprites, 0, sprites.length);
         newSprites[newSprites.length - 1] = sprite;
-        this.sprites = newSprites;
+        sprites = newSprites;
     }
 
     public void removeSprite(String sprite) {
         int pos = -1;
-        for(int i = 0; i < this.sprites.length; ++i) {
-            if(this.sprites[i].equals(sprite)) {
+        for(int i = 0; i < sprites.length; ++i) {
+            if(sprites[i].equals(sprite)) {
                 pos = i;
                 break;
             }
         }
         if(pos > -1) {
-            String[] newSprites = new String[this.sprites.length - 1];
-            System.arraycopy(this.sprites, 0, newSprites, 0, pos);
-            System.arraycopy(this.sprites, pos + 1, newSprites, pos, newSprites.length - pos);
-            this.sprites = newSprites;
+            String[] newSprites = new String[sprites.length - 1];
+            System.arraycopy(sprites, 0, newSprites, 0, pos);
+            System.arraycopy(sprites, pos + 1, newSprites, pos, newSprites.length - pos);
+            sprites = newSprites;
         }
     }
 
     public void addAsset(GameAsset asset) {
-        GameAsset[] newAssets = new GameAsset[this.assets.length + 1];
-        System.arraycopy(this.assets, 0, newAssets, 0, this.assets.length);
+        GameAsset[] newAssets = new GameAsset[assets.length + 1];
+        System.arraycopy(assets, 0, newAssets, 0, assets.length);
         newAssets[newAssets.length - 1] = asset;
-        this.assets = newAssets;
+        assets = newAssets;
     }
 
     public void addAsset(GameAsset asset, int index) {
-        GameAsset[] newAssets = new GameAsset[this.assets.length + 1];
-        System.arraycopy(this.assets, 0, newAssets, 0, index);
+        GameAsset[] newAssets = new GameAsset[assets.length + 1];
+        System.arraycopy(assets, 0, newAssets, 0, index);
         newAssets[index] = asset;
-        System.arraycopy(this.assets, index, newAssets, index + 1, this.assets.length - index);
-        this.assets = newAssets;
+        System.arraycopy(assets, index, newAssets, index + 1, assets.length - index);
+        assets = newAssets;
     }
 
     public void removeAsset(String name) {
         int pos = -1;
-        for(int i = 0; i < this.assets.length; ++i) {
-            if(this.assets[i].getName().equals(name)) {
+        for(int i = 0; i < assets.length; ++i) {
+            if(assets[i].getName().equals(name)) {
                 pos = i;
                 break;
             }
         }
         if(pos > -1) {
-            GameAsset[] newAssets = new GameAsset[this.assets.length - 1];
-            System.arraycopy(this.assets, 0, newAssets, 0, pos);
-            System.arraycopy(this.assets, pos + 1, newAssets, pos, newAssets.length - pos);
-            this.assets = newAssets;
+            GameAsset[] newAssets = new GameAsset[assets.length - 1];
+            System.arraycopy(assets, 0, newAssets, 0, pos);
+            System.arraycopy(assets, pos + 1, newAssets, pos, newAssets.length - pos);
+            assets = newAssets;
         }
     }
 
     public void setAssets(GameAsset[] assets) {
-        this.assets = assets;
+        this.assets = new GameAsset[assets.length];
+        System.arraycopy(assets, 0, this.assets, 0, assets.length);
     }
 
     public void updateAssets() throws InterruptedException {
-        for(GameAsset asset : this.assets) {
+        for(GameAsset asset : assets) {
             asset.update(updateData, this);
         }
     }
 
     public void handleAssets(KeyEvent keyEvent) {
-        for(GameAsset asset : this.assets) {
+        for(GameAsset asset : assets) {
             asset.keyEventHandler(keyEvent);
         }
     }
 
     public int getNoSprites() {
-        return this.sprites.length;
+        return sprites.length;
     }
 
-    public char[] getSpriteName(int i) {
-        return this.sprites[i].toCharArray();
+    public char[] getSpriteName(int index) {
+        return sprites[index].toCharArray();
     }
 
     public int getNoAssets() {
-        return this.assets.length;
+        return assets.length;
     }
 
-    public char[] getAssetSprite(int i) {
-        return this.assets[i].getSprite().toCharArray();
+    public char[] getAssetSprite(int index) {
+        return assets[index].getSprite().toCharArray();
     }
 
-    public double[] getAssetPosition(int i) {
-        return this.assets[i].getPosition();
+    public double[] getAssetPosition(int index) {
+        return assets[index].getPosition();
     }
 }// End of GameHandler class
