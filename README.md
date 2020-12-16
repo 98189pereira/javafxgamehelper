@@ -7,7 +7,7 @@
 1.  In order to get started you will need the packages. 
     You can either clone this repository and 
     copy over them over from `/src/main`, or download 
-    [JavaFXGameHelper-1.0-SNAPSHOT.jar](JavaFXGameHelper-1.0-SNAPSHOT.jar) and 
+    [JavaFXGames-1.0-SNAPSHOT.jar](JavaFXGames-1.0-SNAPSHOT.jar) and 
     add it to your classpath. You will also need the files 
     from `/src/main/resources`. (the `sprites` folder can be emptied, 
     it will hold your game's sprites)
